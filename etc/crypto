@@ -1,0 +1,14 @@
+#!/bin/sh
+
+if [ "$CRYPTO_HOME" == "" ]; then
+  echo CRYPTO_HOME not defined
+  exit 1
+fi
+
+CLASSPATH=$CRYPTO_HOME/crypto.d
+CLASSPATH=$CLASSPATH:$CRYPTO_HOME/crypto.d/crypto.jar
+CLASSPATH=$CLASSPATH:$CRYPTO_HOME/crypto.d/commons-logging-1.1.jar
+CLASSPATH=$CLASSPATH:$CRYPTO_HOME/crypto.d/log4j-1.2.14.jar
+CLASSPATH=$CLASSPATH:$JAVA_HOME/jre/lib/jce.jar
+CMD="$JAVA_HOME/bin/java -classpath $CLASSPATH -Xmx128m crypto.Crypto $@"
+eval $CMD

@@ -1,0 +1,57 @@
+<project name="crypto" default="rebuild" basedir=".">
+  <description>
+    crypto build file
+  </description>
+
+  <property name="appname" value="crypto"/>
+  <property name="javahome" value="/usr/java/jdk1.5.0_14"/>
+  <property name="src" value="src"/>
+  <property name="etc" value="etc"/>
+  <property name="lib" value="lib"/>
+  <property name="output" value="output"/>
+  <property name="classes" value="classes"/>
+
+  <path id="buildpath">
+    <pathelement location="${lib}/commons-logging-1.1.jar"/>
+    <pathelement location="${lib}/log4j-1.2.14.jar"/>
+    <pathelement location="${javahome}/jre/lib/jce.jar"/>
+  </path>
+
+  <target name="init">
+    <tstamp/>
+  </target>
+
+  <target name="clean" depends="init">
+    <delete dir="${output}"/>
+    <delete dir="${classes}"/>
+  </target>
+
+  <target name="compile" depends="init">
+    <mkdir dir="${classes}"/>
+    <javac debug="true" srcdir="${src}" destdir="${classes}" classpathref="buildpath"/>
+  </target>
+
+  <target name="jar" depends="compile">
+    <mkdir dir="${output}"/>
+    <mkdir dir="${output}/${appname}.d"/>
+    <jar jarfile="${output}/${appname}.d/${appname}.jar" basedir="${classes}"/>
+    <copy todir="${output}" file="${etc}/crypto"/>
+    <copy todir="${output}" file="${etc}/encrypt"/>
+    <copy todir="${output}" file="${etc}/decrypt"/>
+    <copy todir="${output}">
+      <fileset dir="${etc}" includes="test.*"/>
+    </copy>
+    <copy todir="${output}/${appname}.d">
+      <fileset dir="${lib}" includes="*.jar"/>
+    </copy>
+    <copy todir="${output}/${appname}.d">
+      <fileset dir="${etc}" includes="*.properties"/>
+    </copy>
+    <chmod file="${output}/crypto" perm="755"/>
+    <chmod file="${output}/encrypt" perm="755"/>
+    <chmod file="${output}/decrypt" perm="755"/>
+  </target>
+
+  <target name="rebuild" depends="clean,jar">
+  </target>
+</project>

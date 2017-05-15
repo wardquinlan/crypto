@@ -1,0 +1,26 @@
+#!/bin/sh
+
+if [ $# == 0 ]; then
+  echo usage: encrypt file ...
+  exit 1
+fi
+
+echo enter key:
+read -s key1
+echo re-enter key:
+read -s key2
+if [ "$key1" != "$key2" ]; then
+  echo keys do not match
+  exit 1
+fi
+
+if [ "$key1" == "" ]; then
+  echo key is empty
+  exit 1
+fi
+
+echo digest= `crypto digestkey -key $key1`
+for file in $@; do
+  echo $file
+  crypto encrypt -key $key1 -nopreserve $file
+done
