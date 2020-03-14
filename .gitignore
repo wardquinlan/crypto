@@ -2,3 +2,6 @@ CVS
 .project
 
 /bin/
+/output/
+/classes/
+
